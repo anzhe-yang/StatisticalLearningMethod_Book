@@ -7,34 +7,34 @@ class LeastSquare:
     def __init__(self):
         self._lambda = 0.0001
 
-    def object_func(self, x):
-        f = np.sin(2 * np.pi * x)
+    def object_func(self, _x):
+        f = np.sin(2 * np.pi * _x)
         return f
 
-    def poly_func(self, p, x):
+    def poly_func(self, _p, _x):
         # np.poly1d返回一个多项式函数类，其中参数代表多项式的最高次数
         # 之后调用本身的函数，参数为多项式中x的值
-        f = np.poly1d(p)
-        func = f(x)
+        f = np.poly1d(_p)
+        func = f(_x)
         return func
 
-    def loss(self, p, x, y):
-        return 1/2 * np.square(self.poly_func(p, x) - y)
+    def loss(self, _p, _x, _y):
+        return 1/2 * np.square(self.poly_func(_p, _x) - _y)
 
-    def loss_with_l1_regularizer(self, p, x, y):
-        return np.append(self.loss(p, x, y), self._lambda * abs(p))
+    def loss_with_l1_regularizer(self, _p, _x, _y):
+        return np.append(self.loss(_p, _x, _y), self._lambda * abs(_p))
 
-    def loss_with_l2_regularizer(self, p, x, y):
-        return np.append(self.loss(p, x, y), self._lambda / 2 * np.sqrt(np.square(p)))
+    def loss_with_l2_regularizer(self, _p, _x, _y):
+        return np.append(self.loss(_p, _x, _y), self._lambda / 2 * np.sqrt(np.square(_p)))
 
-    def fit(self, m, x, y, loss_func):
+    def fit(self, _m, _x, _y, _loss_func):
         """
         使用多项式去拟合目标函数，通过最小二乘法学习到拟合函数
         :param M: 多项式次数
         :return: 拟合函数
         """
-        init = np.random.rand(m+1)
-        ls = leastsq(loss_func, init, args=(x, y))
+        init = np.random.rand(_m+1)
+        ls = leastsq(_loss_func, init, args=(_x, _y))
         ls_coeff = ls[0]
         print('Fitted polynomial coefficients: ', ls_coeff)
         return ls_coeff

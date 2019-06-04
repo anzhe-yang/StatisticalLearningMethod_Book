@@ -3,42 +3,43 @@ import matplotlib.pyplot as plt
 
 
 class DualPerception:
-    def __init__(self, alpha, b, lr, x_train, y_train):
-        self.alpha = alpha
-        self.b = b
-        self.lr = lr
-        self.x_train = x_train
-        self.y_train = y_train
+    def __init__(self, _alpha, _b, _lr, _x_train, _y_train):
+        self.alpha = _alpha
+        self.b = _b
+        self.lr = _lr
+        self.x_train = _x_train
+        self.y_train = _y_train
         self.gram = np.dot(self.x_train, self.x_train.T)
 
-    def loss(self, i):
-        return self.y_train[i] * (np.sum(self.alpha * self.y_train * self.gram[:, i]) + self.b)
+    def loss(self, _i):
+        return self.y_train[_i] * (np.sum(self.alpha * self.y_train * self.gram[:, _i]) + self.b)
 
-    def update_para(self, i):
-        self.alpha[i] += self.lr
-        self.b += self.lr * self.y_train[i]
+    def update_para(self, _i):
+        self.alpha[_i] += self.lr
+        self.b += self.lr * self.y_train[_i]
 
-    def compute_w(self, x, y):
-        w = np.dot((self.alpha * y).T, x)
-        return w
+    def compute_w(self, _x, _y):
+        _w = np.dot((self.alpha * _y).T, _x)
+        return _w
 
-    def obj_fun(self, x_points, w, b):
-        return (x_points * w[1] + b) / (-w[0] + 1e-4)
+    @staticmethod
+    def obj_fun(x_points, _w, _b):
+        return (x_points * _w[1] + _b) / (-_w[0] + 1e-4)
 
     def fit(self):
-        '''
+        """
         首先计算 gram 矩阵
         按顺序选取训练数据和 gram 矩阵中的某一列，若未被正确分类，则更新对应的参数，并不是全部参数
         每次计算错误分类点的个数，如果迭代完全部数据错误分类个数为零，则停止训练
         :return: 训练后的模型和参数 b ，参数 w 需要通过 alpha * y * x 得到
-        '''
+        """
         flag = False
         while not flag:
             error_points = 0
-            for i in range(len(self.x_train)):
-                if self.loss(i) <= 0:
+            for _i in range(len(self.x_train)):
+                if self.loss(_i) <= 0:
                     self.update_para(i)
-                    print('Selected error point: xi= {}'.format(self.x_train[i]))
+                    print('Selected error point: xi= {}'.format(self.x_train[_i]))
                     error_points += 1
             if error_points == 0:
                 flag = True

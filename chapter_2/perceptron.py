@@ -3,25 +3,26 @@ import matplotlib.pyplot as plt
 
 
 class Perception:
-    def __init__(self, w, b, lr, num_epoch, train_data):
-        self.w = w
-        self.b = b
-        self.lr = lr
+    def __init__(self, _w, _b, _lr, num_epoch, train_data):
+        self.w = _w
+        self.b = _b
+        self.lr = _lr
         self.num_epoch = num_epoch
         self.data = train_data
         self.x_train = train_data[:, 0:2]
         self.y_train = train_data[:, 2]
 
-    def sign(self, hx):
+    @staticmethod
+    def sign(hx):
         if hx > 0:
             return 1
         else:
             return -1
 
     def loss(self, j):
-        x = self.x_train[j]
-        y = self.y_train[j]
-        return y * self.sign(np.dot(self.w, x.T) + self.b)
+        _x = self.x_train[j]
+        _y = self.y_train[j]
+        return _y * self.sign(np.dot(self.w, _x.T) + self.b)
 
     def sum_loss(self):
         y_pre_val = (np.dot(self.w.T, self.x_train.T) + self.b).T
@@ -29,21 +30,21 @@ class Perception:
         return np.sum(self.y_train - y_pre_act)
 
     def update_para(self, j):
-        x = self.x_train[j]
-        y = self.y_train[j]
-        self.w += self.lr * y * x
-        self.b += self.lr * y
+        _x = self.x_train[j]
+        _y = self.y_train[j]
+        self.w += self.lr * _y * _x
+        self.b += self.lr * _y
 
     def obj_fun(self, x_points):
         return (x_points * self.w[1] + b) / (-w[0] + 1e-4)
 
     def fit(self):
-        '''
+        """
         每次按顺序从训练数据中选取某个数据，如果未被正确分类，则更新参数
         每次迭代完全部数据后，计算总体损失值，如果为零则结束训练
         否则训练次数为迭代次数
         :return: 训练后模型的参数 w 和 b
-        '''
+        """
         for i in range(self.num_epoch):
             for j in range(self.data.shape[0]):
                 if perception.loss(j) <= 0:
